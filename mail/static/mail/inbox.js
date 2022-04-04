@@ -6,13 +6,21 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
 
-  // By default, load the inbox
-  load_mailbox('inbox');
-
-  document.querySelector('#compose-form').onsubmit = function() {
-    alert('aeee otário')
+  document.querySelector('#compose-form').onsubmit = function(event) {
+    event.preventDefault()
+    fetch('/emails', {
+      method: 'POST',
+      body: JSON.stringify({
+        recipients: document.querySelector('#compose-recipients').value,
+        subject: document.querySelector('#compose-subject').value, 
+        body: document.querySelector('#compose-body').value
+      })
+    })
   }
 
+  // By default, load the inbox
+  load_mailbox('inbox');
+  
 });
 
 function compose_email() {
@@ -37,7 +45,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
-  // TODO:GET e-mails
+  // GET e-mails
   fetch(`emails/${mailbox}`)
   .then(response => response.json())
   .then(emails => {
