@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
 
+  // Send e-mail form
   document.querySelector('#compose-form').onsubmit = function(event) {
     event.preventDefault()
     fetch('/emails', {
